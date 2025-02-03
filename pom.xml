@@ -41,6 +41,14 @@
             <artifactId>spring-boot-starter-jooq</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
@@ -57,6 +65,7 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+            <version>42.7.5</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -77,7 +86,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>10.20.1</version>
+            <version>11.3.0</version>
         </dependency>
 
         <dependency>
@@ -100,6 +109,16 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 
@@ -144,18 +163,23 @@
 <!--                <configuration>-->
 <!--                    <jdbc>-->
 <!--                        <driver>org.postgresql.Driver</driver>-->
-<!--                        <url>jdbc:postgres://localhost:5432/course-project</url>-->
-<!--                        <user>${postgres-user}</user>-->
-<!--                        <password>${postgres-password}</password>-->
+<!--&lt;!&ndash;                        <url>jdbc:postgresql://0.0.0.0:5432/course_project</url>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <url>jdbc:postgresql://db:5432/course_project</url>&ndash;&gt;-->
+<!--                        <url>jdbc:postgresql://localhost:5432/course_project</url>-->
+<!--                        <user>postgres</user>-->
+<!--                        <password>1234</password>-->
 <!--                    </jdbc>-->
 <!--                    <generator>-->
 <!--                        <database>-->
 <!--                            <name>org.jooq.meta.postgres.PostgresDatabase</name>-->
 <!--                            <includes>.*</includes>-->
+<!--                            <excludes>information_schema\..*|pg_catalog\..*</excludes>-->
+<!--                            <inputSchema>public</inputSchema>-->
 <!--                        </database>-->
 <!--                        <target>-->
 <!--                            <packageName>hub.bakdoolot.course_project</packageName>-->
-<!--                            <directory>target/generated_sources.jooq</directory>-->
+<!--&lt;!&ndash;                            <directory>target/generated_sources.jooq</directory>&ndash;&gt;-->
+<!--                            <directory>src/main/java/jooq</directory>-->
 <!--                        </target>-->
 <!--                        <generate>-->
 <!--                            <records>true</records>-->

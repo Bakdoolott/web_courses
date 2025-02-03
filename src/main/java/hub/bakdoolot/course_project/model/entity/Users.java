@@ -13,10 +13,9 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    @Column(nullable = false)
     String firstname;
-    @Column(nullable = false)
     String lastname;
+    String avatar;
 
     @OneToOne
     @JoinColumn(name = "id_account")

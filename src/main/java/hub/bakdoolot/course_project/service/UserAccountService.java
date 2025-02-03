@@ -1,9 +1,11 @@
 package hub.bakdoolot.course_project.service;
 
-import hub.bakdoolot.course_project.model.entity.UserAccount;
+import hub.bakdoolot.course_project.model.dto.entity_dto.UserAccountDto;
 
 import java.util.Optional;
 
+
 public interface UserAccountService {
-    Optional<UserAccount> findUserAccountByPhoneNumber(String login);
+    UserAccountDto createAccount(UserAccountDto userAccountDto);
+    UserAccountDto getUserAccountByPhoneOfEmail(String login);
 }

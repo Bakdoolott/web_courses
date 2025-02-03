@@ -1,6 +1,7 @@
 package hub.bakdoolot.course_project.model.entity;
 
 import hub.bakdoolot.course_project.model.enums.Role;
+import hub.bakdoolot.course_project.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,18 +21,23 @@ public class UserAccount implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    @Column(nullable = false)
     String email;
-    @Column(nullable = false)
     String phoneNumber;
     @Column(nullable = false)
     String password;
     @Enumerated(EnumType.STRING)
     Role role;
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    Status status;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.toString()));
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.status = Status.ACTIVE;
     }
 
     public String getEmail() {

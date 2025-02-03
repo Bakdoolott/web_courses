@@ -1,6 +1,7 @@
 package hub.bakdoolot.course_project.config.jwt;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import hub.bakdoolot.course_project.config.mapper.MapperConfig;
 import hub.bakdoolot.course_project.exception.NotFoundException;
 import hub.bakdoolot.course_project.model.entity.UserAccount;
 import hub.bakdoolot.course_project.service.UserAccountService;
@@ -24,13 +25,14 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserAccountService userAccountService;
+    private final MapperConfig mapperConfig;
 
 
     @Override
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String tokenHeader = request.getHeader("Authorization");
-        if (tokenHeader.startsWith("Bearer ")) {
+        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
             String token = tokenHeader.substring(7);
             if (StringUtils.hasText(token)) {
                 try {
@@ -38,14 +40,15 @@ public class JwtFilter extends OncePerRequestFilter {
                     try {
                         login = jwtService.verifyToken(token);
                     }catch (MalformedJwtException e) {
-                        response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-                        return;
-                    }catch (ExpiredJwtException e) {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
                         return;
+                    }catch (ExpiredJwtException e) {
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+                        return;
                     }
-                    UserAccount account = userAccountService.findUserAccountByPhoneNumber(login).orElseThrow(() ->
-                            new NotFoundException("%s not found".formatted(login)));
+                    UserAccount account = mapperConfig.getMapper().map(
+                            userAccountService.getUserAccountByPhoneOfEmail(login),
+                            UserAccount.class);
                     SecurityContextHolder.getContext().setAuthentication(
                             new UsernamePasswordAuthenticationToken(
                                     account.getUsername(),
@@ -54,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             )
                     );
                 }catch (JWTVerificationException e){
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "hui znaet");
                 }
             }
         }

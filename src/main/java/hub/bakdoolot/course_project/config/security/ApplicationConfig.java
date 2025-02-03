@@ -1,6 +1,8 @@
 package hub.bakdoolot.course_project.config.security;
 
+import hub.bakdoolot.course_project.config.mapper.MapperConfig;
 import hub.bakdoolot.course_project.exception.NotFoundException;
+import hub.bakdoolot.course_project.model.entity.UserAccount;
 import hub.bakdoolot.course_project.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserAccountService userAccountService;
+    private final MapperConfig mapperConfig;
 
     @Bean
     AuthenticationProvider authenticationProvider() {
@@ -31,8 +34,10 @@ public class ApplicationConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return login -> userAccountService.findUserAccountByPhoneNumber(login)
-                .orElseThrow(() -> new NotFoundException("Phone number not found"));
+        return login -> mapperConfig.getMapper().map(
+                userAccountService.getUserAccountByPhoneOfEmail(login),
+                UserAccount.class
+        );
     }
 
     @Bean

@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 
 @Entity
-@Table(name = "likes")
+@Table(name = "tb_like")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Like {

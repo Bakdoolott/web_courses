@@ -21,15 +21,16 @@ public class JwtService {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    String generateToken(UserDetails userDetails) {
+    public String generateToken(String login, String role) {
         return JWT.create()
-                .withClaim("login", userDetails.getUsername())
+                .withClaim("login", login)
+                .withClaim("role", role)
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(ZonedDateTime.now().plusWeeks(4).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
-    String verifyToken(String token) {
+    public String verifyToken(String token) {
         JWTVerifier jwtVerifier = JWT
                 .require(Algorithm.HMAC512(secretKey))
                 .build();

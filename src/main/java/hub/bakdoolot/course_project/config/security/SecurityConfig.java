@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @EnableWebSecurity
 @Configuration
@@ -22,9 +23,26 @@ public class SecurityConfig{
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+//                .cors(cors -> cors.configurationSource(request -> {
+//                    var corsConfiguration = new CorsConfiguration();
+//                    corsConfiguration.addAllowedOrigin("http://localhost:3000");
+//                    corsConfiguration.addAllowedOrigin("http://localhost");
+//                    corsConfiguration.addAllowedOrigin("*");
+//                    corsConfiguration.addAllowedMethod("*");
+//                    corsConfiguration.addAllowedHeader("*");
+//                    corsConfiguration.setAllowCredentials(true);
+//                    return corsConfiguration;
+//                }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/login")
+                        .requestMatchers(
+                                "/auth/sign-in/**", "/auth/**",
+                                "/",
+                                "/api/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api/**",
+                                "/api/files/get-path")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
